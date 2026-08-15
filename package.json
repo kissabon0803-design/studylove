@@ -1,0 +1,10 @@
+{
+  "name": "study-love-chat-backend",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}
