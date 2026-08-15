@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>勉強シンクロ - 由比ヶ浜結衣と、放課後の教室で。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-1:#1c1e33; --bg-2:#262a4a; --bg-3:#2f3358;
+  --card:#333a63; --card-2:#3c4472;
+  --paper:#fff6ec; --ink:#3c3450;
+  --gold:#ffc857; --gold-deep:#e0a52f;
+  --pink:#f2a6c1; --pink-deep:#d97fa3;
+  --coral:#ff8c6b; --coral-deep:#e96f4d;
+  --text:#f4efe6; --faint:#a6abd6; --line:#454c80;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+body{
+  margin:0; font-family:'Zen Maru Gothic',sans-serif; color:var(--text);
+  background:radial-gradient(ellipse at 50% -10%, var(--bg-3), var(--bg-1) 65%);
+  min-height:100vh; display:flex; justify-content:center;
+}
+.shell{ width:100%; max-width:460px; min-height:100vh; display:flex; flex-direction:column; position:relative; }
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:16px 18px 10px;
+}
+.topbar .logo{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:16px; letter-spacing:.03em; }
+.topbar .logo b{ color:var(--coral); }
+.xp-pill{
+  display:flex; align-items:center; gap:5px; background:var(--card);
+  border:1px solid var(--line); border-radius:20px; padding:4px 10px; font-size:11px; color:var(--gold);
+}
+.screen{ display:none; padding:6px 18px 100px; flex:1; }
+.screen.active{ display:block; }
+
+/* ---------- HOME ---------- */
+.hero{
+  background:linear-gradient(155deg, var(--card-2), var(--card));
+  border:1px solid var(--line); border-radius:20px; padding:20px 18px; margin-bottom:16px;
+  position:relative; overflow:hidden;
+}
+.hero::after{
+  content:''; position:absolute; right:-40px; top:-40px; width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle, rgba(242,166,193,.25), transparent 70%);
+}
+.hero-greet{ font-size:12.5px; color:var(--faint); margin-bottom:2px;}
+.hero-name{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:19px; margin-bottom:14px; }
+.hero-name span{ color:var(--pink); }
+.stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:6px; }
+.stat-box{ background:rgba(0,0,0,.15); border-radius:12px; padding:10px 12px; }
+.stat-box .label{ font-size:10.5px; color:var(--faint); margin-bottom:3px; }
+.stat-box .value{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:18px; }
+.stat-box .value.gold{ color:var(--gold); }
+.stat-box .value.pink{ color:var(--pink); }
+
+.bond-wrap{ margin:14px 0 4px; }
+.bond-label{ display:flex; justify-content:space-between; font-size:11px; color:var(--faint); margin-bottom:5px; }
+.bond-bar{ height:10px; border-radius:6px; background:rgba(0,0,0,.25); overflow:hidden; position:relative; }
+.bond-fill{ height:100%; border-radius:6px; background:linear-gradient(90deg, var(--pink-deep), var(--pink)); transition:width .6s ease; }
+
+.cta-main{
+  width:100%; margin-top:16px; border:none; border-radius:16px; padding:18px;
+  background:linear-gradient(135deg, var(--coral), var(--coral-deep));
+  color:#2b1a12; font-weight:900; font-size:17px; font-family:'Zen Maru Gothic',sans-serif;
+  cursor:pointer; box-shadow:0 10px 24px rgba(255,140,107,.35); letter-spacing:.02em;
+}
+.cta-main:active{ transform:scale(.98); }
+.cta-sub{ text-align:center; font-size:11px; color:var(--faint); margin-top:8px; }
+
+.section-title{ font-family:'Shippori Mincho',serif; font-weight:700; font-size:14px; margin:22px 0 10px; color:var(--text); }
+.next-card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px;
+  display:flex; align-items:center; gap:12px;
+}
+.next-card .icon{ font-size:22px; }
+.next-card .body{ flex:1; }
+.next-card .title{ font-size:13px; font-weight:700; margin-bottom:4px; }
+.next-card .prog-bar{ height:6px; background:rgba(0,0,0,.3); border-radius:4px; overflow:hidden; }
+.next-card .prog-fill{ height:100%; background:var(--gold); }
+.next-card .pct{ font-size:10.5px; color:var(--faint); margin-top:4px; }
+
+.goal-wrap{ margin-top:16px; background:rgba(0,0,0,.16); border-radius:14px; padding:12px 14px; }
+.goal-label-row{ display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--faint); margin-bottom:6px; }
+.goal-edit-link{ color:var(--gold); cursor:pointer; font-weight:700; }
+.goal-numbers{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:17px; margin-bottom:7px; }
+.goal-numbers span{ font-size:12px; color:var(--faint); font-weight:500; font-family:'Zen Maru Gothic',sans-serif;}
+.goal-bar{ background:rgba(0,0,0,.35); }
+.goal-fill{ background:linear-gradient(90deg, var(--coral-deep), var(--gold)); }
+.goal-edit-row{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+.goal-edit-row input{
+  width:64px; background:var(--card); border:1px solid var(--line); color:var(--text);
+  border-radius:8px; padding:6px; text-align:center; font-family:inherit; font-size:13px;
+}
+
+/* ---------- TIMER ---------- */
+.mode-toggle{ display:flex; gap:8px; margin:8px 0 18px; }
+.mode-btn{
+  flex:1; padding:10px; border-radius:12px; border:1px solid var(--line); background:var(--card);
+  color:var(--faint); font-family:'Zen Maru Gothic',sans-serif; font-size:13px; font-weight:700; cursor:pointer;
+}
+.mode-btn.active{ background:var(--coral); color:#2b1a12; border-color:var(--coral); }
+
+.timer-ring-wrap{ display:flex; justify-content:center; margin:8px 0 14px; }
+.timer-ring{ position:relative; width:240px; height:240px; }
+.timer-ring svg{ width:100%; height:100%; }
+.timer-center{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.timer-center .tt{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:40px; }
+.timer-center .tl{ font-size:11.5px; color:var(--faint); margin-top:4px; }
+
+.preset-row{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:14px; }
+.preset-chip{
+  border:1px solid var(--line); background:transparent; color:var(--faint); padding:7px 14px;
+  border-radius:18px; font-size:12.5px; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif;
+}
+.preset-chip.active{ background:var(--gold); border-color:var(--gold); color:#2b1a12; font-weight:800; }
+.custom-row{ display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:20px; font-size:12px; color:var(--faint);}
+.custom-row input{
+  width:56px; background:var(--card); border:1px solid var(--line); color:var(--text);
+  border-radius:8px; padding:7px; text-align:center; font-family:inherit; font-size:13px;
+}
+.timer-controls{ display:flex; gap:10px; justify-content:center; }
+.tbtn{ border:none; border-radius:14px; padding:13px 20px; font-weight:800; font-size:14px; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif;}
+.tbtn.start{ background:var(--coral); color:#2b1a12; flex:1;}
+.tbtn.ghost{ background:transparent; border:1px solid var(--line); color:var(--text); }
+.abandon-note{ text-align:center; font-size:11px; color:var(--faint); margin-top:14px; line-height:1.7;}
+
+/* ---------- CONVO ---------- */
+.event-card{
+  background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 15px; margin-bottom:10px;
+  display:flex; gap:12px; align-items:center; cursor:pointer; position:relative;
+}
+.event-card.locked{ opacity:.45; }
+.avatar{
+  width:44px; height:44px; border-radius:50%; flex-shrink:0;
+  background:linear-gradient(145deg, var(--pink), var(--pink-deep));
+  display:flex; align-items:center; justify-content:center; font-family:'Shippori Mincho',serif; font-weight:800; color:#3c1c2a; font-size:16px;
+}
+.event-card .etitle{ font-size:13.5px; font-weight:700; }
+.event-card .etag{ font-size:10.5px; color:var(--faint); margin-top:2px; }
+.new-badge{
+  position:absolute; top:-6px; right:-6px; background:var(--coral); color:#2b1a12; font-size:9.5px;
+  font-weight:800; padding:2px 7px; border-radius:10px;
+}
+
+/* ---------- MODAL / DIALOGUE ---------- */
+.overlay{
+  position:fixed; inset:0; background:rgba(15,14,28,.72); backdrop-filter:blur(2px);
+  display:none; align-items:flex-end; justify-content:center; z-index:50;
+}
+.overlay.show{ display:flex; }
+.sheet{
+  width:100%; max-width:460px; background:var(--paper); color:var(--ink); border-radius:22px 22px 0 0;
+  padding:22px 20px 26px; max-height:82vh; overflow-y:auto; animation:slideup .3s ease;
+}
+@keyframes slideup{ from{ transform:translateY(30px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
+.sheet-head{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+.sheet-head .avatar{ width:40px; height:40px; }
+.sheet-head .name{ font-weight:800; font-size:14.5px; }
+.sheet-head .mood{ font-size:11px; color:var(--pink-deep); }
+.dialogue-line{
+  background:#fff; border:1px solid #ecdfca; border-radius:14px; border-top-left-radius:4px;
+  padding:11px 14px; margin-bottom:9px; font-size:14px; line-height:1.75; opacity:0; animation:fadein .4s forwards;
+}
+@keyframes fadein{ to{opacity:1;} }
+.close-sheet{
+  width:100%; margin-top:8px; border:none; border-radius:12px; padding:12px; background:var(--coral);
+  color:#2b1a12; font-weight:800; font-family:'Zen Maru Gothic',sans-serif; font-size:13.5px; cursor:pointer;
+}
+.skip-btn{
+  border:1px solid #ecdfca; background:#fff; color:var(--ink); font-size:10.5px; font-weight:700;
+  border-radius:14px; padding:6px 10px; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif; white-space:nowrap;
+}
+.vn-box{
+  background:#fff; border:1px solid #ecdfca; border-radius:14px; border-top-left-radius:4px;
+  padding:16px 16px 14px; min-height:88px; cursor:pointer; position:relative; user-select:none;
+}
+.vn-box p{ margin:0; font-size:14.5px; line-height:1.85; min-height:52px; }
+.vn-hint{ text-align:right; font-size:10.5px; color:var(--coral-deep); font-weight:700; margin-top:6px; animation:blink 1.2s infinite; }
+@keyframes blink{ 50%{ opacity:.35; } }
+.vn-progress{ display:flex; gap:5px; justify-content:center; margin:10px 0 4px; }
+.vn-dot{ width:6px; height:6px; border-radius:50%; background:#e2d6bd; }
+.vn-dot.on{ background:var(--coral-deep); }
+.complete-banner{
+  display:flex; align-items:center; gap:8px; background:#fff2df; border:1px solid var(--gold-deep);
+  color:#6b4c14; border-radius:12px; padding:10px 14px; margin-top:10px; font-size:12.5px; font-weight:700;
+}
+
+.reward-sheet .big-icon{ text-align:center; font-size:38px; margin-bottom:6px; }
+.reward-sheet h3{ text-align:center; font-family:'Shippori Mincho',serif; margin:0 0 16px; font-size:17px; }
+.reward-row{ display:flex; justify-content:space-between; background:#fff; border-radius:10px; padding:10px 14px; margin-bottom:8px; font-size:13px; border:1px solid #ecdfca;}
+.reward-row b{ color:var(--coral-deep); }
+.unlock-note{ text-align:center; font-size:12.5px; color:var(--coral-deep); font-weight:700; margin:10px 0 4px; }
+
+/* ---------- STORY ---------- */
+.chapter-card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px; margin-bottom:12px;
+}
+.chapter-card.locked{ opacity:.4; }
+.chapter-eyebrow{ font-size:10.5px; color:var(--gold); letter-spacing:.08em; margin-bottom:4px; }
+.chapter-title{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:16px; margin-bottom:8px; }
+.chapter-cond{ font-size:11.5px; color:var(--faint); }
+.chapter-open{
+  margin-top:10px; border:none; border-radius:10px; padding:9px 16px; background:var(--gold);
+  color:#2b1a12; font-weight:800; font-size:12.5px; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif;
+}
+.story-text p{ font-size:14.5px; line-height:2; margin:0 0 14px; }
+
+/* ---------- RECORDS ---------- */
+.log-row{
+  display:flex; justify-content:space-between; align-items:center; padding:12px 4px; border-bottom:1px solid var(--line); font-size:13px;
+}
+.log-row .d{ color:var(--faint); font-size:11.5px; }
+.empty-note{ text-align:center; color:var(--faint); font-size:12.5px; padding:30px 10px; }
+
+.chart-wrap{
+  display:flex; align-items:flex-end; gap:7px; height:140px; padding:12px 8px 0;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; margin-bottom:18px;
+}
+.chart-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+.chart-bar{ width:62%; background:linear-gradient(180deg, var(--coral), var(--coral-deep)); border-radius:6px 6px 2px 2px; min-height:3px; transition:height .5s ease; }
+.chart-val{ font-size:9px; color:var(--faint); margin-bottom:3px; height:11px; }
+.chart-day{ font-size:9.5px; color:var(--faint); margin-top:6px; }
+.chart-col.today .chart-bar{ background:linear-gradient(180deg, var(--gold), var(--gold-deep)); }
+.chart-col.today .chart-day{ color:var(--gold); font-weight:800; }
+
+/* ---------- STATUS ---------- */
+.rank-card{ text-align:center; background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px 14px; margin-bottom:16px;}
+.rank-card .lv{ font-family:'Shippori Mincho',serif; font-size:30px; font-weight:800; color:var(--gold); }
+.rank-card .rk{ font-size:12.5px; color:var(--faint); margin-top:4px; }
+.badge-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.badge{
+  background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 6px; text-align:center; font-size:10.5px; color:var(--faint);
+}
+.badge.got{ border-color:var(--gold); color:var(--text); }
+.badge .bi{ font-size:20px; display:block; margin-bottom:5px; }
+
+/* ---------- AI CHAT ---------- */
+.chat-mode-toggle{ margin-bottom:14px; gap:6px; }
+.chat-mode-toggle .mode-btn{ font-size:10.5px; padding:9px 2px; }
+.chat-window{
+  display:flex; flex-direction:column; gap:10px; min-height:280px; max-height:50vh;
+  overflow-y:auto; padding:4px 2px 12px; margin-bottom:12px;
+}
+.chat-row{ display:flex; flex-direction:column; max-width:86%; }
+.chat-row.char{ align-items:flex-start; align-self:flex-start; }
+.chat-row.user{ align-items:flex-end; align-self:flex-end; }
+.chat-name-label{ font-size:10px; color:var(--faint); margin:0 3px 3px; }
+.chat-bubble{
+  padding:10px 13px; border-radius:15px; font-size:13.5px; line-height:1.75;
+  opacity:0; animation:fadein .3s forwards; white-space:pre-wrap;
+}
+.chat-bubble.char{ background:var(--card); border:1px solid var(--line); border-top-left-radius:4px; }
+.chat-bubble.user{
+  background:linear-gradient(135deg, var(--coral), var(--coral-deep));
+  color:#2b1a12; font-weight:700; border-top-right-radius:4px;
+}
+.chat-bubble.error{
+  background:rgba(255,90,90,.12); border:1px solid rgba(255,90,90,.4); color:#ff9d9d;
+  border-top-left-radius:4px; font-size:12.5px;
+}
+.chat-typing{ font-size:11.5px; color:var(--faint); padding:2px 6px; }
+.chat-suggest-row{ margin-bottom:10px; }
+.chat-study-btn{
+  width:100%; border:none; border-radius:14px; padding:13px; cursor:pointer;
+  background:linear-gradient(135deg, var(--gold), var(--gold-deep)); color:#2b1a12;
+  font-weight:800; font-size:13.5px; font-family:'Zen Maru Gothic',sans-serif;
+}
+.chat-input-row{ display:flex; gap:8px; }
+.chat-input-row input{
+  flex:1; background:var(--card); border:1px solid var(--line); color:var(--text);
+  border-radius:14px; padding:12px 14px; font-family:inherit; font-size:13.5px; min-width:0;
+}
+.chat-input-row input::placeholder{ color:var(--faint); }
+.chat-input-row input:disabled{ opacity:.6; }
+.chat-send-btn{
+  border:none; border-radius:14px; padding:0 18px; background:var(--coral); color:#2b1a12;
+  font-weight:800; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif; font-size:13px;
+}
+.chat-send-btn:disabled{ opacity:.6; cursor:default; }
+
+/* ---------- AUTH ---------- */
+.auth-shell{
+  display:none; min-height:100vh; width:100%; max-width:460px; align-items:center;
+  justify-content:center; padding:24px; box-sizing:border-box;
+}
+.auth-card{
+  width:100%; background:var(--card); border:1px solid var(--line); border-radius:20px; padding:28px 22px;
+}
+.auth-logo{ font-family:'Shippori Mincho',serif; font-weight:800; font-size:20px; text-align:center; margin-bottom:4px; }
+.auth-logo span{ color:var(--coral); }
+.auth-sub{ text-align:center; font-size:11.5px; color:var(--faint); margin-bottom:22px; }
+.auth-label{ display:block; font-size:11px; color:var(--faint); margin:14px 0 6px; }
+.auth-form input{
+  width:100%; background:var(--bg-2); border:1px solid var(--line); color:var(--text);
+  border-radius:12px; padding:11px 13px; font-family:inherit; font-size:13.5px; box-sizing:border-box;
+}
+.auth-form input::placeholder{ color:var(--faint); }
+.auth-error{ color:var(--coral); font-size:11.5px; margin-top:12px; line-height:1.6; }
+.auth-btn{
+  width:100%; margin-top:20px; border:none; border-radius:14px; padding:14px;
+  background:linear-gradient(135deg, var(--coral), var(--coral-deep)); color:#2b1a12;
+  font-weight:900; font-size:14.5px; font-family:'Zen Maru Gothic',sans-serif; cursor:pointer;
+}
+.auth-btn:disabled{ opacity:.6; cursor:default; }
+.auth-btn-secondary{
+  background:transparent; border:1px solid var(--line); color:var(--text);
+  margin-top:10px; font-weight:800;
+}
+.auth-note{ margin-top:16px; font-size:10px; color:var(--faint); line-height:1.8; text-align:center; }
+.auth-divider{
+  display:flex; align-items:center; gap:10px; margin:18px 0 0; font-size:11px; color:var(--faint);
+}
+.auth-divider::before, .auth-divider::after{
+  content:""; flex:1; height:1px; background:var(--line);
+}
+.auth-btn-google{
+  width:100%; margin-top:10px; border:1px solid var(--line); border-radius:14px; padding:12px;
+  background:#fff; color:#3c4043; font-weight:800; font-size:13.5px; font-family:'Zen Maru Gothic',sans-serif;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.auth-btn-google:disabled{ opacity:.6; cursor:default; }
+
+/* ---------- ACCOUNT (status screen) ---------- */
+.account-card{
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:12px 14px; margin-bottom:16px;
+}
+.account-email{ font-size:11.5px; color:var(--faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.account-logout-btn{
+  flex-shrink:0; border:1px solid var(--line); background:transparent; color:var(--text);
+  font-size:11.5px; font-weight:700; border-radius:10px; padding:7px 12px; cursor:pointer;
+  font-family:'Zen Maru Gothic',sans-serif;
+}
+
+/* ---------- NAV ---------- */
+.navbar{
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:460px;
+  background:rgba(28,30,51,.92); backdrop-filter:blur(8px); border-top:1px solid var(--line);
+  display:flex; padding:8px 6px 14px; z-index:20;
+}
+.nav-btn{
+  flex:1; background:none; border:none; color:var(--faint); display:flex; flex-direction:column; align-items:center;
+  gap:3px; font-size:9.5px; font-family:'Zen Maru Gothic',sans-serif; cursor:pointer; padding:6px 2px;
+}
+.nav-btn .ni{ font-size:18px; }
+.nav-btn.active{ color:var(--coral); }
+
+/* ---------- TOAST / LEVEL UP ---------- */
+.toast{
+  position:fixed; top:14px; left:50%; transform:translateX(-50%) translateY(-16px);
+  background:#241f38; border:1px solid var(--gold); color:var(--text); font-size:12.5px; font-weight:700;
+  padding:10px 18px; border-radius:20px; z-index:80; opacity:0; pointer-events:none;
+  transition:opacity .3s ease, transform .3s ease; white-space:nowrap; box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+<!-- AUTH SCREEN -->
+<div class="auth-shell" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo">勉強シンクロ<span>。</span></div>
+    <div class="auth-sub">由比ヶ浜結衣と、放課後の教室で。</div>
+    <div class="auth-form">
+      <label class="auth-label">メールアドレス</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" autocomplete="username">
+      <label class="auth-label">パスワード</label>
+      <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
+      <div class="auth-error" id="authError" style="display:none;"></div>
+      <button class="auth-btn" id="authLoginBtn">ログイン</button>
+      <button class="auth-btn auth-btn-secondary" id="authSignupBtn">新規登録</button>
+      <div class="auth-divider"><span>または</span></div>
+      <button class="auth-btn auth-btn-google" id="authGoogleBtn">
+        <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right:8px;vertical-align:-4px;"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.56 2.7-3.87 2.7-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.66 9c0-.59.1-1.17.29-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97l2.99 2.33C4.66 5.17 6.65 3.58 9 3.58z"/></svg>
+        Googleでログイン
+      </button>
+      <div class="auth-note">
+        ※ Firebase Authenticationでログインします。初めての方は「新規登録」からアカウントを作成してください。
+        勉強記録・経験値・好感度・ストーリー進行・チャット履歴はアカウントごとに分けて保存されます。
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shell" id="appShell" style="display:none;">
+
+  <div class="topbar">
+    <div class="logo">勉強シンクロ<b>。</b></div>
+    <div class="xp-pill">✨ <span id="xpPill">0</span> EXP</div>
+  </div>
+
+  <!-- HOME -->
+  <div class="screen active" id="screen-home">
+    <div class="hero">
+      <div class="hero-greet" id="greetLine">やっはろー、今日も一緒にがんばろ。</div>
+      <button class="cta-main" id="ctaStart">今から勉強する ▶</button>
+      <div class="cta-sub">25分がんばると、結衣からのメッセージが届くかも。</div>
+
+      <div class="goal-wrap">
+        <div class="goal-label-row">
+          <span>今日の目標</span>
+          <span class="goal-edit-link" id="goalEditToggle">編集</span>
+        </div>
+        <div class="goal-numbers"><span id="goalCurrent">0</span>分 / <span id="goalTarget">60</span>分</div>
+        <div class="bond-bar goal-bar"><div class="bond-fill goal-fill" id="goalFill" style="width:0%"></div></div>
+        <div class="goal-edit-row" id="goalEditRow" style="display:none;">
+          <input type="number" id="goalInput" min="10" max="600" placeholder="分">
+          <button class="preset-chip" id="goalApplyBtn">設定</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">今日の記録</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="label">今日の勉強時間</div><div class="value" id="homeToday">0分</div></div>
+      <div class="stat-box"><div class="label">累計勉強時間</div><div class="value gold" id="homeTotal">0分</div></div>
+      <div class="stat-box"><div class="label">連続日数</div><div class="value" id="homeStreak">0日</div></div>
+      <div class="stat-box"><div class="label">レベル</div><div class="value gold" id="homeLevel">Lv.1</div></div>
+    </div>
+
+    <div class="section-title">結衣との距離</div>
+    <div class="next-card" style="margin-bottom:16px;">
+      <div class="icon">💗</div>
+      <div class="body">
+        <div class="title" id="bondPctTitle">好感度 0</div>
+        <div class="prog-bar"><div class="prog-fill" id="bondFill2" style="width:0%; background:var(--pink);"></div></div>
+        <div class="pct" id="bondPctText2">0%</div>
+      </div>
+    </div>
+
+    <div class="section-title">次のイベントまで</div>
+    <div class="next-card">
+      <div class="icon">🔔</div>
+      <div class="body">
+        <div class="title" id="nextEventTitle">-</div>
+        <div class="prog-bar"><div class="prog-fill" id="nextEventFill" style="width:0%"></div></div>
+        <div class="pct" id="nextEventPct">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMER -->
+  <div class="screen" id="screen-timer">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modeWorkBtn">📚 勉強</button>
+      <button class="mode-btn" id="modeBreakBtn">☕ 休憩</button>
+    </div>
+
+    <div class="timer-ring-wrap">
+      <div class="timer-ring">
+        <svg viewBox="0 0 240 240">
+          <circle cx="120" cy="120" r="106" fill="none" stroke="#3c4472" stroke-width="11"/>
+          <circle id="timerRingProgress" cx="120" cy="120" r="106" fill="none" stroke="var(--coral)" stroke-width="11"
+            stroke-linecap="round" stroke-dasharray="666" stroke-dashoffset="666" transform="rotate(-90 120 120)"/>
+        </svg>
+        <div class="timer-center">
+          <div class="tt" id="timerDisplay">25:00</div>
+          <div class="tl" id="timerStateLabel">開始を待っています</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preset-row" id="workPresets">
+      <button class="preset-chip active" data-min="25">25分</button>
+      <button class="preset-chip" data-min="45">45分</button>
+      <button class="preset-chip" data-min="60">60分</button>
+    </div>
+    <div class="custom-row">
+      <span>自分で設定:</span>
+      <input type="number" id="customMinInput" min="1" max="180" placeholder="分">
+      <button class="preset-chip" id="applyCustomBtn">適用</button>
+    </div>
+
+    <div class="timer-controls">
+      <button class="tbtn ghost" id="resetTimerBtn">リセット</button>
+      <button class="tbtn start" id="startPauseBtn">はじめる</button>
+    </div>
+    <div class="abandon-note">※ 完了前にリセット・中断すると経験値と好感度は入りません。</div>
+  </div>
+
+  <!-- CONVO -->
+  <div class="screen" id="screen-convo">
+    <div class="section-title">結衣との会話</div>
+    <div id="eventList"></div>
+  </div>
+
+  <!-- AI CHAT -->
+  <div class="screen" id="screen-chat">
+    <div class="section-title">結衣とチャット</div>
+    <div class="mode-toggle chat-mode-toggle" id="chatModeToggle">
+      <button class="mode-btn active" data-mode="consult">📚 勉強相談</button>
+      <button class="mode-btn" data-mode="cheer">💪 応援</button>
+      <button class="mode-btn" data-mode="romance">💗 恋愛</button>
+      <button class="mode-btn" data-mode="casual">☕ 雑談</button>
+    </div>
+    <div class="chat-window" id="chatWindow"></div>
+    <div class="chat-suggest-row" id="chatSuggestRow" style="display:none;">
+      <button class="chat-study-btn" id="chatStudyBtn">⏱ 25分勉強する</button>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="結衣にメッセージを送る…" maxlength="300">
+      <button class="chat-send-btn" id="chatSendBtn">送信</button>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <div class="screen" id="screen-story">
+    <div class="section-title">ストーリー</div>
+    <div id="chapterList"></div>
+  </div>
+
+  <!-- RECORDS -->
+  <div class="screen" id="screen-records">
+    <div class="section-title">勉強記録</div>
+    <div class="stat-grid" style="margin-bottom:18px;">
+      <div class="stat-box"><div class="label">今日</div><div class="value" id="recToday">0分</div></div>
+      <div class="stat-box"><div class="label">今週(直近7日)</div><div class="value gold" id="recWeek">0分</div></div>
+      <div class="stat-box"><div class="label">累計</div><div class="value" id="recTotal">0分</div></div>
+      <div class="stat-box"><div class="label">連続日数</div><div class="value" id="recStreak">0日</div></div>
+    </div>
+    <div class="section-title">直近7日間の勉強時間</div>
+    <div class="chart-wrap" id="chartWrap"></div>
+    <div class="section-title">履歴</div>
+    <div id="recordList"></div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="screen" id="screen-status">
+    <div class="account-card">
+      <div class="account-email" id="accountEmailLabel">-</div>
+      <button class="account-logout-btn" id="logoutBtn">ログアウト</button>
+    </div>
+    <div class="rank-card">
+      <div class="lv" id="statusLevel">Lv.1</div>
+      <div class="rk" id="statusRank">駆け出し勉強家</div>
+    </div>
+    <div class="section-title">記録</div>
+    <div class="stat-grid" style="margin-bottom:18px;">
+      <div class="stat-box"><div class="label">累計勉強時間</div><div class="value" id="statTotal">0分</div></div>
+      <div class="stat-box"><div class="label">最大連続日数</div><div class="value" id="statBestStreak">0日</div></div>
+      <div class="stat-box"><div class="label">完了セッション</div><div class="value" id="statSessions">0回</div></div>
+      <div class="stat-box"><div class="label">好感度</div><div class="value pink" id="statAffection">0</div></div>
+    </div>
+    <div class="section-title">解放バッジ</div>
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+
+  <div class="navbar">
+    <button class="nav-btn active" data-screen="home"><span class="ni">🏠</span>ホーム</button>
+    <button class="nav-btn" data-screen="timer"><span class="ni">⏱️</span>タイマー</button>
+    <button class="nav-btn" data-screen="convo"><span class="ni">💬</span>会話</button>
+    <button class="nav-btn" data-screen="chat"><span class="ni">🤖</span>チャット</button>
+    <button class="nav-btn" data-screen="story"><span class="ni">📖</span>ストーリー</button>
+    <button class="nav-btn" data-screen="records"><span class="ni">📊</span>記録</button>
+    <button class="nav-btn" data-screen="status"><span class="ni">⭐</span>ステータス</button>
+  </div>
+</div>
+
+<!-- dialogue overlay -->
+<div class="overlay" id="dialogueOverlay">
+  <div class="sheet">
+    <div class="sheet-head">
+      <div class="avatar" id="vnAvatar">結</div>
+      <div style="flex:1;">
+        <div class="name" id="vnName">由比ヶ浜結衣</div>
+        <div class="mood" id="dialogueMood">-</div>
+      </div>
+      <button class="skip-btn" id="skipDialogueBtn">スキップ ⏭</button>
+    </div>
+    <div class="vn-box" id="vnBox">
+      <p id="vnText"></p>
+      <div class="vn-hint" id="vnHint" style="display:none;">タップで次へ ▶</div>
+    </div>
+    <div class="vn-progress" id="vnProgress"></div>
+    <div class="complete-banner" id="completeBanner" style="display:none;">
+      <span>✅</span><span id="completeBannerText"></span>
+    </div>
+    <button class="close-sheet" id="closeDialogueBtn" style="display:none;">とじる</button>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<!-- reward overlay -->
+<div class="overlay" id="rewardOverlay">
+  <div class="sheet reward-sheet">
+    <div class="big-icon">🎉</div>
+    <h3 id="rewardHeading">勉強完了！</h3>
+    <div class="reward-row"><span>経験値</span><b id="rewardXp">+0</b></div>
+    <div class="reward-row"><span>好感度</span><b id="rewardAff">+0</b></div>
+    <div class="unlock-note" id="unlockNote" style="display:none;"></div>
+    <button class="close-sheet" id="closeRewardBtn">とじる</button>
+  </div>
+</div>
+
+<script type="module">
+/* ============================================================
+   FIREBASE AUTHENTICATION (実接続)
+   ------------------------------------------------------------
+   Firebase Web SDK (modular / v9+) を CDN から import して使用する。
+   firebaseConfig は公開クライアント識別子であり、Firebase公式ドキュ
+   メントでもクライアントコードへの埋め込みが前提とされている値のため
+   問題ない。ただし、パスワードやAdmin SDKの秘密鍵など「本当の秘密情報」
+   は絶対にここに書かないこと（このファイルには含めていない）。
+============================================================ */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+/* ============ storage (localStorage with in-memory fallback) ============ */
+const memoryStore = {};
+const storage = {
+  get(key){
+    try{ const v = localStorage.getItem(key); return v===null ? null : v; }
+    catch(e){ return key in memoryStore ? memoryStore[key] : null; }
+  },
+  set(key,val){
+    try{ localStorage.setItem(key,val); }
+    catch(e){ memoryStore[key]=val; }
+  },
+  remove(key){
+    try{ localStorage.removeItem(key); }
+    catch(e){ delete memoryStore[key]; }
+  }
+};
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDpi6F9vDyX4nnThHeCxxRhu-Jxo7sGis4",
+  authDomain: "studylove-a9351.firebaseapp.com",
+  projectId: "studylove-a9351",
+  storageBucket: "studylove-a9351.firebasestorage.app",
+  messagingSenderId: "223164012175",
+  appId: "1:223164012175:web:3f769d7a3d794acc4282fa",
+  measurementId: "G-JRYY2LY0P9"
+};
+const firebaseApp = initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+/* ⚠️ API接続ポイント: Groq APIプロキシ（Vercel Serverless Function）
+   デプロイ後、実際のURLに書き換えること。
+   例: https://study-love-chat.vercel.app/api/chat
+   APIキーはこのURL越しのサーバー側にのみ存在し、クライアントには一切含まれない。 */
+const CHAT_API_URL = 'https://studylove-utuj-rust.vercel.app/api/chat';
+
+let currentUser = null; // { uid, email } | null （ログインしていない間は null）
+
+/* ---- data key helpers: ユーザーごとにデータを分離するためのキー生成（user.uidを使用） ---- */
+function getSaveKey(){
+  return 'studysync_yui_save_v1_' + (currentUser ? currentUser.uid : 'guest');
+}
+function getChatHistoryKey(){
+  return 'studysync_yui_chat_v1_' + (currentUser ? currentUser.uid : 'guest');
+}
+
+/* ---- auth UI helpers ---- */
+function showAuthError(msg){
+  const el = document.getElementById('authError');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function clearAuthError(){
+  document.getElementById('authError').style.display = 'none';
+}
+function setAuthBusy(busy){
+  document.getElementById('authLoginBtn').disabled = busy;
+  document.getElementById('authSignupBtn').disabled = busy;
+  document.getElementById('authGoogleBtn').disabled = busy;
+  document.getElementById('authLoginBtn').textContent = busy ? '処理中…' : 'ログイン';
+  document.getElementById('authSignupBtn').textContent = busy ? '処理中…' : '新規登録';
+}
+function translateAuthError(err){
+  const map = {
+    'auth/invalid-email': 'メールアドレスの形式が正しくありません。',
+    'auth/user-disabled': 'このアカウントは無効化されています。',
+    'auth/user-not-found': 'ユーザーが見つかりません。',
+    'auth/wrong-password': 'パスワードが正しくありません。',
+    'auth/invalid-credential': 'メールアドレスまたはパスワードが正しくありません。',
+    'auth/email-already-in-use': 'このメールアドレスは既に登録されています。',
+    'auth/weak-password': 'パスワードは6文字以上で設定してください。',
+    'auth/network-request-failed': '通信エラーが発生しました。ネットワーク環境を確認してください。',
+    'auth/too-many-requests': '試行回数が多すぎます。しばらくしてから再試行してください。',
+    'auth/popup-closed-by-user': 'ログインウィンドウが閉じられました。もう一度お試しください。',
+    'auth/popup-blocked': 'ポップアップがブロックされました。ブラウザの設定を確認してください。',
+    'auth/cancelled-popup-request': '前のログイン処理が進行中です。少し待ってから再試行してください。',
+    'auth/account-exists-with-different-credential': 'このメールアドレスは別のログイン方法で登録されています。'
+  };
+  return map[err && err.code] || ('エラーが発生しました（'+((err&&err.code)||'unknown')+'）');
+}
+
+/* ---- auth actions ---- */
+async function handleLoginSubmit(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if(!email){ showAuthError('メールアドレスを入力してください。'); return; }
+  if(!password){ showAuthError('パスワードを入力してください。'); return; }
+  clearAuthError();
+  setAuthBusy(true);
+  try{
+    await signInWithEmailAndPassword(auth, email, password);
+    // 成功後は onAuthStateChanged が検知して自動的に showApp() を呼ぶ
+  }catch(err){
+    showAuthError(translateAuthError(err));
+  }finally{
+    setAuthBusy(false);
+  }
+}
+async function handleSignupSubmit(){
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if(!email){ showAuthError('メールアドレスを入力してください。'); return; }
+  if(!password){ showAuthError('パスワードを入力してください。'); return; }
+  if(password.length < 6){ showAuthError('パスワードは6文字以上で設定してください。'); return; }
+  clearAuthError();
+  setAuthBusy(true);
+  try{
+    await createUserWithEmailAndPassword(auth, email, password);
+    // 成功後は onAuthStateChanged が検知して自動的に showApp() を呼ぶ
+  }catch(err){
+    showAuthError(translateAuthError(err));
+  }finally{
+    setAuthBusy(false);
+  }
+}
+async function handleGoogleLogin(){
+  clearAuthError();
+  setAuthBusy(true);
+  try{
+    await signInWithPopup(auth, googleProvider);
+    // 成功後は onAuthStateChanged が検知して自動的に showApp() を呼ぶ
+  }catch(err){
+    if(err && err.code !== 'auth/cancelled-popup-request'){
+      showAuthError(translateAuthError(err));
+    }
+  }finally{
+    setAuthBusy(false);
+  }
+}
+async function handleLogout(){
+  try{
+    await signOut(auth);
+    // 成功後は onAuthStateChanged が currentUser=null にして showAuthScreen() を呼ぶ
+  }catch(err){
+    console.error('signOut error', err);
+  }
+}
+function showAuthScreen(){
+  document.getElementById('authScreen').style.display = 'flex';
+  document.getElementById('appShell').style.display = 'none';
+  document.getElementById('authEmail').value = '';
+  document.getElementById('authPassword').value = '';
+  clearAuthError();
+}
+function showApp(){
+  document.getElementById('authScreen').style.display = 'none';
+  document.getElementById('appShell').style.display = 'flex';
+  startApp();
+}
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function yesterdayStr(){
+  const d = new Date(); d.setDate(d.getDate()-1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function defaultState(){
+  return {
+    xp:0, affection:0, totalSeconds:0, todaySeconds:0, todayDate: todayStr(),
+    streak:0, bestStreak:0, lastStudyDate:null, sessionsDone:0,
+    unlockedEvents:[], unlockedChapters:['ch1'], newFlags:{},
+    settings:{ workMin:25, breakMin:5, dailyGoalMin:60 }, sessionLog:[],
+    goalAchievedDate:null
+  };
+}
+function loadState(){
+  const raw = storage.get(getSaveKey());
+  if(!raw) return defaultState();
+  try{
+    const parsed = JSON.parse(raw);
+    const merged = Object.assign(defaultState(), parsed);
+    // deep-merge nested objects so new prototype fields don't get lost on old saves
+    merged.settings = Object.assign(defaultState().settings, parsed.settings || {});
+    merged.newFlags = Object.assign({}, parsed.newFlags || {});
+    return merged;
+  }catch(e){ return defaultState(); }
+}
+function saveState(){
+  storage.set(getSaveKey(), JSON.stringify(state));
+}
+let state = defaultState(); // ログイン後に startApp() 内で該当ユーザーのデータへ差し替える
+
+/* ============ content: events & chapters ============ */
+const EVENTS = [
+  { id:'first25', title:'初めて25分がんばった', mood:'明るく励ます',
+    cond:s=> s.sessionsDone>=1,
+    lines:[
+      'やっはろー！……あ、ちゃんと25分やりきったんだ、えらいじゃん。',
+      '正直、途中で飽きて絶対スマホ見てると思ってた（笑）',
+      'この調子でいこ！わたしも隣で見てるから。'
+    ]},
+  { id:'hour1', title:'累計1時間達成', mood:'少し照れる',
+    cond:s=> s.totalSeconds>=3600,
+    lines:[
+      'え、もう1時間分もがんばったの？地味にすごくない？',
+      '……なんか、こうやって積み重ねてるの見ると、ちょっと応援したくなるっていうか。',
+      'べ、別に感動してるとかじゃないからね！ただの感想！'
+    ]},
+  { id:'streak3', title:'3日連続達成', mood:'喜ぶ',
+    cond:s=> s.streak>=3,
+    lines:[
+      '3日連続とか、わたし三日坊主だから普通に尊敬するんだけど。',
+      '毎日ちゃんと来てくれると、なんか約束守られてるみたいで嬉しい。',
+      '明日も待ってるから、ここで。'
+    ]},
+  { id:'hour3', title:'累計3時間達成', mood:'軽くツッコむ',
+    cond:s=> s.totalSeconds>=3600*3,
+    lines:[
+      'ちょっと待って、3時間って地味に本気出してない？',
+      '最初はやる気なさそうだったのに、いつの間にキャラ変わったの（笑）',
+      'まあ、頑張ってる人は嫌いじゃないよ。応援する。'
+    ]},
+  { id:'hour5', title:'累計5時間達成', mood:'休憩をすすめる',
+    cond:s=> s.totalSeconds>=3600*5,
+    lines:[
+      '5時間って結構な積み重ねだよ。ちゃんと寝てる？ごはん食べてる？',
+      '無理して倒れられる方が困るから、たまにはちゃんと休んでね。',
+      'わたしはどこにも逃げないから、ペース考えながらでいいよ。'
+    ]},
+  { id:'streak7', title:'7日連続達成', mood:'特別な話',
+    cond:s=> s.streak>=7,
+    lines:[
+      '7日連続とか、さすがに続きすぎでしょ（笑）',
+      'わたしも気づいたら、この時間が来るのを待ってるんだよね。',
+      '……勉強のためなのか、なんなのか、自分でもよくわかんなくなってきたかも。',
+      'とりあえず、8日目もよろしく。'
+    ]},
+  { id:'streak14', title:'14日連続達成', mood:'特別会話',
+    cond:s=> s.streak>=14,
+    lines:[
+      '2週間か……最初はここまで続くと思ってなかった、正直。',
+      'でも結局、毎日顔合わせてると、なんか安心するんだよね。',
+      '勉強してるところしか見てないはずなのに、なんでこんなに距離近い気がするんだろ。',
+      'まあ、悪い気はしてないから。これからもよろしくね。'
+    ]},
+  { id:'streak30', title:'30日連続達成', mood:'特別な一日',
+    cond:s=> s.streak>=30,
+    lines:[
+      '1ヶ月、か。',
+      '正直こんなに続くとは思ってなかったし、続けさせてもらってるのはこっちの方かも。',
+      '一人だと絶対サボってた自信あるし、隣に誰かいるのって、思ったより大事なんだなって最近思う。',
+      'これからも、こうやって一緒に頑張れたらいいな。',
+      'えっと……その、これからもよろしくね。'
+    ]}
+];
+
+const CHAPTERS = [
+  { id:'ch1', no:1, title:'勉強を始める',
+    cond:s=> true, condText:'',
+    text:[
+      '放課後の教室に残っているのは、部活の声が遠くから聞こえてくるだけの静かな時間。',
+      'たまたま同じ空き教室で自習していたら、由比ヶ浜結衣も同じ場所に居座るようになった。',
+      '「ここ、意外と集中できるんだよね」と笑いながら、彼女は隣の席にノートを広げる。',
+      'それが、二人の「勉強シンクロ」の始まりだった。'
+    ]},
+  { id:'ch2', no:2, title:'少しずつ仲良くなる',
+    cond:s=> s.affection>=20 && s.totalSeconds>=3600, condText:'好感度20・累計勉強1時間で解放',
+    text:[
+      '気づけば、隣の席が「いつもの場所」になっていた。',
+      '最初は世間話ばかりだった休憩時間も、最近はお互いの勉強の進み具合を報告し合うようになっている。',
+      '「今日はここまでやる」と決めて始めたタイマーも、結衣がいると不思議と最後まで続けられる。',
+      '勉強するほど、ほんの少しずつ、二人の距離が近づいていく気がした。'
+    ]},
+  { id:'ch3', no:3, title:'勉強を続ける理由',
+    cond:s=> s.affection>=40 && s.totalSeconds>=3600*8, condText:'好感度40・累計勉強8時間で解放',
+    text:[
+      '「なんでそんなに頑張れるの？」と聞いてみると、結衣は少し考えてから答えた。',
+      '「んー、最初はただの暇つぶしだったんだけどさ。」',
+      '「今は……ここで頑張ってる誰かがいるから、わたしも頑張れる、みたいな？」',
+      '照れくさそうに笑いながら、結衣はまたノートに視線を戻す。',
+      '理由なんて、案外そんな些細なことでいいのかもしれない。'
+    ]}
+];
+
+const AFFECTION_MAX_FOR_BAR = 60; // 表示用の一区切り
+
+/* ============ navigation ============ */
+const screens = document.querySelectorAll('.screen');
+const navBtns = document.querySelectorAll('.nav-btn');
+function goScreen(name){
+  screens.forEach(s=> s.classList.toggle('active', s.id === 'screen-'+name));
+  navBtns.forEach(b=> b.classList.toggle('active', b.dataset.screen === name));
+  if(name==='home') renderHome();
+  if(name==='convo') renderEvents();
+  if(name==='chat') renderChat();
+  if(name==='story') renderChapters();
+  if(name==='records') renderRecords();
+  if(name==='status') renderStatus();
+}
+navBtns.forEach(b=> b.addEventListener('click', ()=> goScreen(b.dataset.screen)));
+document.getElementById('ctaStart').addEventListener('click', ()=> goScreen('timer'));
+
+/* ---- today's goal: edit toggle ---- */
+const goalEditRow = document.getElementById('goalEditRow');
+document.getElementById('goalEditToggle').addEventListener('click', ()=>{
+  const showing = goalEditRow.style.display !== 'none';
+  goalEditRow.style.display = showing ? 'none' : 'flex';
+  document.getElementById('goalInput').value = state.settings.dailyGoalMin;
+});
+document.getElementById('goalApplyBtn').addEventListener('click', ()=>{
+  const v = parseInt(document.getElementById('goalInput').value);
+  if(v>0 && v<=600){
+    state.settings.dailyGoalMin = v;
+    saveState();
+    goalEditRow.style.display = 'none';
+    renderHome();
+  }
+});
+
+/* ============ timer ============ */
+let mode = 'work'; // 'work' | 'break'
+let totalSeconds = state.settings.workMin*60;
+let remaining = totalSeconds;
+let running = false;
+let timerId = null;
+let abandonable = false; // true once started, false after natural completion or reset
+
+const RING_CIRC = 666;
+const timerDisplay = document.getElementById('timerDisplay');
+const timerStateLabel = document.getElementById('timerStateLabel');
+const ringProgress = document.getElementById('timerRingProgress');
+const startPauseBtn = document.getElementById('startPauseBtn');
+const resetTimerBtn = document.getElementById('resetTimerBtn');
+const modeWorkBtn = document.getElementById('modeWorkBtn');
+const modeBreakBtn = document.getElementById('modeBreakBtn');
+const workPresets = document.getElementById('workPresets');
+const customMinInput = document.getElementById('customMinInput');
+
+function fmtTime(s){
+  const m = Math.floor(s/60).toString().padStart(2,'0');
+  const sec = (s%60).toString().padStart(2,'0');
+  return m+':'+sec;
+}
+function updateRing(){
+  const progress = totalSeconds>0 ? 1 - remaining/totalSeconds : 0;
+  ringProgress.style.strokeDashoffset = RING_CIRC - RING_CIRC*progress;
+}
+function refreshTimerDisplay(){
+  timerDisplay.textContent = fmtTime(remaining);
+  updateRing();
+}
+function setMode(newMode){
+  if(running) return; // don't allow mode switch mid-run to keep logic simple
+  mode = newMode;
+  modeWorkBtn.classList.toggle('active', mode==='work');
+  modeBreakBtn.classList.toggle('active', mode==='break');
+  workPresets.style.display = mode==='work' ? 'flex' : 'none';
+  totalSeconds = (mode==='work' ? state.settings.workMin : state.settings.breakMin) * 60;
+  remaining = totalSeconds;
+  refreshTimerDisplay();
+  timerStateLabel.textContent = '開始を待っています';
+  startPauseBtn.textContent = 'はじめる';
+}
+modeWorkBtn.addEventListener('click', ()=> setMode('work'));
+modeBreakBtn.addEventListener('click', ()=> setMode('break'));
+
+workPresets.querySelectorAll('.preset-chip').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(running) return;
+    workPresets.querySelectorAll('.preset-chip').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.settings.workMin = parseInt(btn.dataset.min);
+    saveState();
+    totalSeconds = state.settings.workMin*60;
+    remaining = totalSeconds;
+    refreshTimerDisplay();
+  });
+});
+document.getElementById('applyCustomBtn').addEventListener('click', ()=>{
+  if(running) return;
+  const v = parseInt(customMinInput.value);
+  if(v>0 && v<=180){
+    workPresets.querySelectorAll('.preset-chip').forEach(b=>b.classList.remove('active'));
+    state.settings.workMin = v;
+    saveState();
+    totalSeconds = v*60;
+    remaining = totalSeconds;
+    refreshTimerDisplay();
+  }
+});
+
+function tickTimer(){
+  remaining--;
+  refreshTimerDisplay();
+  if(remaining<=0){
+    clearInterval(timerId);
+    running = false;
+    abandonable = false;
+    startPauseBtn.textContent = 'はじめる';
+    timerStateLabel.textContent = '完了！';
+    completeSession(mode, mode==='work' ? state.settings.workMin : state.settings.breakMin);
+    setTimeout(()=> setMode(mode), 400);
+  }
+}
+startPauseBtn.addEventListener('click', ()=>{
+  if(!running){
+    running = true;
+    abandonable = true;
+    startPauseBtn.textContent = '一時停止';
+    timerStateLabel.textContent = mode==='work' ? '集中中……' : '休憩中……';
+    timerId = setInterval(tickTimer, 1000);
+  } else {
+    running = false;
+    clearInterval(timerId);
+    startPauseBtn.textContent = '再開する';
+    timerStateLabel.textContent = '一時停止中';
+  }
+});
+resetTimerBtn.addEventListener('click', ()=>{
+  clearInterval(timerId);
+  running = false;
+  abandonable = false;
+  remaining = totalSeconds;
+  refreshTimerDisplay();
+  startPauseBtn.textContent = 'はじめる';
+  timerStateLabel.textContent = '開始を待っています';
+});
+
+/* ============ session completion / rewards ============ */
+function updateStreakOnStudy(){
+  if(state.lastStudyDate === todayStr()){
+    // already studied today, streak unchanged
+  } else if(state.lastStudyDate === yesterdayStr()){
+    state.streak += 1;
+  } else {
+    state.streak = 1;
+  }
+  state.lastStudyDate = todayStr();
+  if(state.streak > state.bestStreak) state.bestStreak = state.streak;
+}
+
+function checkUnlocks(){
+  const newlyUnlocked = [];
+  EVENTS.forEach(ev=>{
+    if(!state.unlockedEvents.includes(ev.id) && ev.cond(state)){
+      state.unlockedEvents.push(ev.id);
+      state.newFlags[ev.id] = true;
+      newlyUnlocked.push({type:'event', id:ev.id, title:ev.title});
+    }
+  });
+  CHAPTERS.forEach(ch=>{
+    if(!state.unlockedChapters.includes(ch.id) && ch.cond(state)){
+      state.unlockedChapters.push(ch.id);
+      newlyUnlocked.push({type:'chapter', id:ch.id, title:ch.title});
+    }
+  });
+  return newlyUnlocked;
+}
+
+/* ---- level system: flat 100xp per level ---- */
+function levelFromXp(xp){ return Math.floor(xp/100)+1; }
+function xpIntoLevel(xp){ return xp%100; }
+
+/* ---- toast queue (used for level-up / goal-achieved, kept light & non-blocking) ---- */
+let toastQueue = [];
+function queueToast(msg){ toastQueue.push(msg); }
+function showToast(msg){
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(()=> el.classList.remove('show'), 2200);
+}
+function flushToastQueue(){
+  const msgs = toastQueue.slice();
+  toastQueue = [];
+  msgs.forEach((msg,i)=> setTimeout(()=> showToast(msg), i*1700));
+}
+
+function completeSession(type, minutes){
+  if(type === 'break'){
+    saveState();
+    showReward(0,0,'休憩完了',[]);
+    return;
+  }
+  const levelBefore = levelFromXp(state.xp);
+  const dailyGoalSeconds = state.settings.dailyGoalMin*60;
+  const todaySecondsBefore = state.todaySeconds;
+
+  const xpGain = minutes;
+  const affGain = Math.max(1, Math.round(minutes*0.2));
+  state.xp += xpGain;
+  state.affection += affGain;
+  state.totalSeconds += minutes*60;
+  if(state.todayDate !== todayStr()){ state.todayDate = todayStr(); state.todaySeconds = 0; }
+  state.todaySeconds += minutes*60;
+  state.sessionsDone += 1;
+  updateStreakOnStudy();
+  state.sessionLog.unshift({ date: todayStr(), minutes: minutes, type:'work' });
+  if(state.sessionLog.length>100) state.sessionLog.length = 100;
+  const unlocks = checkUnlocks();
+
+  const levelAfter = levelFromXp(state.xp);
+  if(levelAfter > levelBefore){
+    queueToast('🎉 Lv.'+levelAfter+' になった！');
+  }
+  if(todaySecondsBefore < dailyGoalSeconds && state.todaySeconds >= dailyGoalSeconds && state.goalAchievedDate !== todayStr()){
+    state.goalAchievedDate = todayStr();
+    queueToast('🎯 今日の目標を達成しました！');
+  }
+
+  saveState();
+  showReward(xpGain, affGain, '勉強完了！', unlocks);
+}
+
+/* ============ reward overlay ============ */
+const rewardOverlay = document.getElementById('rewardOverlay');
+function showReward(xp, aff, heading, unlocks){
+  document.getElementById('rewardHeading').textContent = heading;
+  document.getElementById('rewardXp').textContent = '+'+xp;
+  document.getElementById('rewardAff').textContent = '+'+aff;
+  const note = document.getElementById('unlockNote');
+  if(unlocks && unlocks.length){
+    note.style.display = 'block';
+    note.textContent = '🔓 新しい' + (unlocks[0].type==='event' ? '会話' : 'ストーリー') + 'が解放されました:「'+unlocks[0].title+'」';
+  } else {
+    note.style.display = 'none';
+  }
+  rewardOverlay.classList.add('show');
+}
+document.getElementById('closeRewardBtn').addEventListener('click', ()=>{
+  rewardOverlay.classList.remove('show');
+  refreshAllStatsDisplays();
+  flushToastQueue();
+});
+
+/* ============ dialogue overlay: visual-novel style typewriter player ============ */
+const dialogueOverlay = document.getElementById('dialogueOverlay');
+const vnBox = document.getElementById('vnBox');
+const vnText = document.getElementById('vnText');
+const vnHint = document.getElementById('vnHint');
+const vnProgress = document.getElementById('vnProgress');
+const completeBanner = document.getElementById('completeBanner');
+const completeBannerText = document.getElementById('completeBannerText');
+const closeDialogueBtn = document.getElementById('closeDialogueBtn');
+const skipDialogueBtn = document.getElementById('skipDialogueBtn');
+const TYPE_SPEED_MS = 26;
+
+let vnLines = [];
+let vnIndex = 0;
+let vnCharIndex = 0;
+let vnTyping = false;
+let vnTimerId = null;
+let vnMeta = null;
+
+function renderVnDots(){
+  vnProgress.innerHTML = '';
+  vnLines.forEach((_,i)=>{
+    const d = document.createElement('span');
+    d.className = 'vn-dot' + (i<=vnIndex ? ' on' : '');
+    vnProgress.appendChild(d);
+  });
+}
+function typeLine(idx){
+  vnIndex = idx;
+  vnCharIndex = 0;
+  vnTyping = true;
+  vnText.textContent = '';
+  vnHint.style.display = 'none';
+  renderVnDots();
+  clearInterval(vnTimerId);
+  const line = vnLines[idx];
+  vnTimerId = setInterval(()=>{
+    vnCharIndex++;
+    vnText.textContent = line.slice(0, vnCharIndex);
+    if(vnCharIndex >= line.length){
+      clearInterval(vnTimerId);
+      vnTyping = false;
+      vnHint.style.display = 'block';
+      vnHint.textContent = (idx < vnLines.length-1) ? 'タップで次へ ▶' : 'タップで読了';
+    }
+  }, TYPE_SPEED_MS);
+}
+function vnCompleteCurrentLineInstantly(){
+  clearInterval(vnTimerId);
+  vnTyping = false;
+  vnText.textContent = vnLines[vnIndex];
+  vnHint.style.display = 'block';
+  vnHint.textContent = (vnIndex < vnLines.length-1) ? 'タップで次へ ▶' : 'タップで読了';
+}
+function vnFinish(){
+  vnHint.style.display = 'none';
+  completeBanner.style.display = 'flex';
+  completeBannerText.textContent = vnMeta.completionLabel;
+  closeDialogueBtn.style.display = 'block';
+}
+function vnAdvance(){
+  if(vnTyping){ vnCompleteCurrentLineInstantly(); return; }
+  if(vnIndex < vnLines.length-1){ typeLine(vnIndex+1); }
+  else { vnFinish(); }
+}
+function vnSkip(){
+  clearInterval(vnTimerId);
+  vnTyping = false;
+  vnIndex = vnLines.length-1;
+  vnText.textContent = vnLines[vnIndex];
+  renderVnDots();
+  vnFinish();
+}
+vnBox.addEventListener('click', vnAdvance);
+skipDialogueBtn.addEventListener('click', vnSkip);
+
+function startVN(lines, meta){
+  vnLines = lines;
+  vnMeta = meta;
+  document.getElementById('dialogueMood').textContent = meta.mood;
+  document.getElementById('vnAvatar').textContent = meta.avatarChar || '結';
+  document.getElementById('vnName').textContent = meta.name || '由比ヶ浜結衣';
+  completeBanner.style.display = 'none';
+  closeDialogueBtn.style.display = 'none';
+  dialogueOverlay.classList.add('show');
+  typeLine(0);
+}
+function openDialogue(ev){
+  state.newFlags[ev.id] = false;
+  saveState();
+  startVN(ev.lines, {
+    mood: ev.mood, name:'由比ヶ浜結衣', avatarChar:'結',
+    completionLabel: 'イベント達成:「'+ev.title+'」'
+  });
+}
+closeDialogueBtn.addEventListener('click', ()=>{
+  clearInterval(vnTimerId);
+  dialogueOverlay.classList.remove('show');
+  renderEvents();
+  renderChapters();
+});
+
+/* ============================================================
+   AI CHAT
+   ------------------------------------------------------------
+   由比ヶ浜結衣をモデルにした「勉強サポートキャラクター」との
+   チャット機能。原作のセリフは一切使わず、名前・キャラクター性・
+   話し方の雰囲気だけを参考にしたオリジナル発言のみを扱う。
+
+   実際の応答は Vercel Serverless Function (/api/chat) 経由で
+   Groq API から生成される（requestCharacterReply() 参照）。
+   Groq APIキーはこのHTML/JS内には一切含まれず、Vercel側の
+   環境変数にのみ保存されている。リクエストには Firebase の
+   IDトークンを付与し、サーバー側でログイン済みユーザーか検証する。
+   buildCharacterSystemPrompt() / mockCharacterReply() は
+   オフライン時の参考実装として残しているが、通常は使用しない。
+============================================================ */
+
+/* ---- character definition (persona reference only, never quoted verbatim) ---- */
+const AI_CHARACTER = {
+  name: '由比ヶ浜結衣',
+  avatarChar: '結',
+  // このメモはプロンプト構築時の参考情報。ユーザーには表示しない。
+  personaNote: '明るくてちょっとおっちょこちょい、素直じゃないけど面倒見がいい。タメ口で親しみやすく話す。'
+};
+
+/* ---- chat state ---- */
+let chatMode = 'consult'; // 'consult' | 'cheer' | 'romance' | 'casual'
+let casualTurnCount = 0;
+let romanceTurnCount = 0;
+const CHAT_HISTORY_MAX = 30; // 直近30件（保存データが肥大化しないよう上限を設ける）
+
+function loadChatHistory(){
+  try{
+    const raw = storage.get(getChatHistoryKey());
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){ return []; }
+}
+function saveChatHistory(){
+  if(chatMessages.length > CHAT_HISTORY_MAX){
+    chatMessages = chatMessages.slice(chatMessages.length - CHAT_HISTORY_MAX);
+  }
+  try{ storage.set(getChatHistoryKey(), JSON.stringify(chatMessages)); }catch(e){}
+}
+let chatMessages = []; // ログイン後に startApp() 内で該当ユーザーの履歴へ差し替える
+
+/* ---- study data snapshot: passed to the character so replies reflect real progress ---- */
+function getCurrentChapterInfo(){
+  const unlocked = CHAPTERS.filter(c=> state.unlockedChapters.includes(c.id));
+  if(unlocked.length===0) return null;
+  return unlocked.reduce((a,b)=> b.no>a.no ? b : a);
+}
+function buildStudySnapshot(){
+  const goalMin = state.settings.dailyGoalMin;
+  const todayMin = Math.floor(state.todaySeconds/60);
+  const chapterInfo = getCurrentChapterInfo();
+  return {
+    todayMinutes: todayMin,
+    totalMinutes: Math.floor(state.totalSeconds/60),
+    todayGoalMinutes: goalMin,
+    todayGoalAchievedRate: goalMin>0 ? Math.min(100, Math.round(todayMin/goalMin*100)) : 0,
+    streakDays: state.streak,
+    level: levelFromXp(state.xp),
+    xp: state.xp,
+    affection: state.affection,
+    currentChapter: chapterInfo ? ('Chapter '+chapterInfo.no+'「'+chapterInfo.title+'」') : '-',
+    unlockedEvents: state.unlockedEvents.slice()
+  };
+}
+
+/* ---- system prompt builder (ready for real API use; not called by the mock) ---- */
+function buildCharacterSystemPrompt(mode, studySnapshot){
+  const modeInstructions = {
+    consult: '勉強方法・集中の仕方・休憩の取り方など、勉強に関する相談に乗ってください。',
+    cheer: 'ユーザーが勉強を始める前や疲れているときに、自然な言葉で励ましてください。',
+    romance: 'ユーザーとの関係性についての相談や、恋愛的なニュアンスのある会話を楽しんでください。露骨・性的な表現は絶対に使わず、健全な青春ラブコメの範囲にとどめること。現在の好感度（affection）に応じて親密さの段階を変化させること: 低好感度（目安20未満）は友達として自然な会話、中好感度（目安20〜44）は少し照れたり距離が近くなる会話、高好感度（目安45以上）はお互いを特別に意識しているような青春ラブコメ的な会話。恋愛の話だけで終始せず、区切りの良いところで自然に勉強の話へ戻してください。',
+    casual: '勉強以外の軽い雑談にも付き合ってください。ただし雑談だけをずっと続けず、区切りの良いところで自然に勉強の話に戻してください。'
+  };
+  return [
+    'あなたは「'+AI_CHARACTER.name+'」という名前のキャラクターとして、ユーザーの勉強を支える話し相手を演じます。',
+    'キャラクターの雰囲気: '+AI_CHARACTER.personaNote,
+    '厳守事項:',
+    '・原作にある'+AI_CHARACTER.name+'のセリフを一切引用しないこと。名前とキャラクター性の雰囲気のみ参考にし、発言内容はすべてオリジナルにすること。',
+    '・「何でも肯定するAI」にはならないこと。応援する友達・相談相手として、時には現実的なアドバイスや軽いツッコミも交えること。',
+    '・ユーザーを無理に勉強させようとしないこと。誘う程度にとどめること。',
+    '・タメ口で親しみやすい話し方をすること。',
+    '現在の会話モード: '+(modeInstructions[mode] || modeInstructions.consult),
+    'ユーザーの現在の学習状況（参考にして返信してください）:',
+    JSON.stringify(studySnapshot)
+  ].join('\n');
+}
+
+/* ---- reply generation ----
+   Vercel Serverless Function (/api/chat) を経由して Groq API を呼び出す。
+   Firebase の IDトークンを Authorization ヘッダーで送ることで、
+   サーバー側がログイン済みユーザーかどうかを検証する。
+   Groq APIキーはクライアントに一切保持しない。
+   history には呼び出し時点の直前までの会話（今回のユーザー発言は含めない）を渡す。
+*/
+class ChatReplyError extends Error {
+  constructor(message){ super(message); this.name = 'ChatReplyError'; }
+}
+async function requestCharacterReply(userMessage, mode, studySnapshot, historyBeforeThisMessage){
+  if(!auth.currentUser){
+    throw new ChatReplyError('ログインが確認できませんでした。もう一度ログインし直してみて。');
+  }
+  const trimmedHistory = historyBeforeThisMessage
+    .slice(-10)
+    .map(m => ({ role: m.role, text: m.text }));
+
+  let idToken;
+  try{
+    idToken = await auth.currentUser.getIdToken();
+  }catch(e){
+    throw new ChatReplyError('ログインが確認できませんでした。もう一度ログインし直してみて。');
+  }
+
+  let res;
+  try{
+    res = await fetch(CHAT_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + idToken
+      },
+      body: JSON.stringify({
+        message: userMessage,
+        mode,
+        studySnapshot,
+        history: trimmedHistory
+      })
+    });
+  }catch(e){
+    throw new ChatReplyError('通信エラーが発生しました。ネットワーク環境を確認してもう一度試してみて。');
+  }
+
+  if(!res.ok){
+    throw new ChatReplyError(translateChatHttpError(res.status));
+  }
+
+  let data;
+  try{ data = await res.json(); }catch(e){
+    throw new ChatReplyError('AIの応答形式が不正でした。もう一度試してみて。');
+  }
+  if(!data || !data.reply){
+    throw new ChatReplyError('AIの応答が空でした。もう一度試してみて。');
+  }
+  return { text: data.reply, suggestStudy: !!data.suggestStudy };
+}
+function translateChatHttpError(status){
+  if(status === 401 || status === 403) return 'ログインが確認できませんでした。もう一度ログインし直してみて。';
+  if(status === 429) return '今ちょっと混み合ってるみたい。少し時間をおいてからもう一度試してみて。';
+  if(status === 400) return 'メッセージを送れなかったよ。もう一度試してみて。';
+  if(status >= 500) return 'サーバーでエラーが発生しました。もう一度試してみて。';
+  return '通信エラーが発生しました。もう一度試してみて。';
+}
+
+function pickLine(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ---- romance mode: tone shifts with affection level (既存の好感度システムと連動) ---- */
+function getAffectionTier(affection){
+  if(affection < 20) return 'low';
+  if(affection < 45) return 'mid';
+  return 'high';
+}
+const ROMANCE_LINES = {
+  low: {
+    generic: [
+      'えっと、そういう話？別にまだよくわかんないけど、友達としてなら聞くよ。',
+      '恋バナ的なやつ？そういうのはまだ考えたことないけど、気になることあるの？',
+      '別に意識してるとかじゃないけど、こうやって話す相手がいるのは悪くないかも。'
+    ],
+    nudgeBack: [
+      'まあその話はまたにして、ちょっと勉強の方も進めとこ？',
+      '恋バナはまたゆっくりするとして、今日はちょっとだけ勉強しよっか。'
+    ]
+  },
+  mid: {
+    generic: [
+      'そ、そういうこと聞かれると、ちょっと反応に困るんだけど……。',
+      '最近、前より話しやすくなった気がするんだよね、あんたと。',
+      '……別に意識してるわけじゃないから、勘違いしないでよね。'
+    ],
+    nudgeBack: [
+      '……なんか照れるから、この話はここまで。区切りに勉強でもしよ？',
+      'ちょっと待って、これ以上はまた今度。とりあえず今日の分、進めよっか。'
+    ]
+  },
+  high: {
+    generic: [
+      '正直に言うと……あんたが隣で頑張ってるの見るの、結構好きなんだよね。',
+      'こうやって話してる時間、地味に一日の楽しみになってきてるかも。',
+      '……もし将来もこんな感じで隣にいたら、悪くないなって、たまに思う。'
+    ],
+    nudgeBack: [
+      '……あー、なんか恥ずかしいこと言った気がする。忘れて。とりあえずもう少しだけ勉強してみる？',
+      'こういう話ばっかしてると絆されそうだから、ちょっと勉強のターンにしよ？'
+    ]
+  }
+};
+
+function mockCharacterReply(userMessage, mode, snapshot){
+  const text = userMessage;
+
+  const minuteMatch = text.match(/(\d{1,3})\s*分/);
+  if(minuteMatch){
+    const said = parseInt(minuteMatch[1]);
+    const actual = snapshot.todayMinutes;
+    const line = (actual>=said)
+      ? pickLine([
+          `${said}分か、いいペースじゃん。今日の記録だともう${actual}分になってるし、この調子でいこ。`,
+          `おー、ちゃんと報告できるの偉いね。今日のトータルは${actual}分だよ。`,
+          `${said}分がんばったんだ。今日は${actual}分の積み上げだし、悪くないと思う。`
+        ])
+      : pickLine([
+          `${said}分か。記録上は今日${actual}分になってるけど、まあ数字より続けてることの方が大事だし。`,
+          `数字はちょっとズレてる気もするけど、そこは深く聞かないでおくね。今日は${actual}分ってことになってるよ。`
+        ]);
+    return { text: line, suggestStudy:false };
+  }
+
+  if(mode==='consult'){
+    if(/集中/.test(text)){
+      return { text: pickLine([
+        'まずはスマホを視界の外に置くだけでも結構変わるよ。あと最初の5分だけ頑張るって決めると、意外と続いちゃったりする。',
+        '集中できない日は無理に長時間やろうとせず、短い時間で区切ってみるのがおすすめ。25分くらいから試してみたら？'
+      ]), suggestStudy:false };
+    }
+    if(/休憩/.test(text)){
+      return { text: pickLine([
+        '休憩は罪悪感持たなくていいよ。5〜10分くらい席を離れて、また戻ってくれば十分。',
+        'ずっと詰め込むより、こまめに休んだ方が結局は伸びると思う。休むのもサボりじゃないから。'
+      ]), suggestStudy:false };
+    }
+    if(/眠い|だるい|めんどくさい|やる気(が)?ない|しんどい/.test(text)){
+      return { text: pickLine([
+        'そういう日もあるよ。無理に全部やろうとしなくていいから、ちょっとだけ手をつけてみる？',
+        'わかる、そのテンションの日ね。今日は10分だけでもいいから、やってみようか。'
+      ]), suggestStudy:true };
+    }
+    return { text: pickLine([
+      '勉強のことで悩んでるなら、具体的に何につまずいてるか教えてくれる？',
+      'なるほどね。とりあえず今の状況、もうちょっと詳しく聞かせて。'
+    ]), suggestStudy:false };
+  }
+
+  if(mode==='cheer'){
+    const lines = [
+      `連続${snapshot.streakDays}日ってさりげにすごいと思うけどね。今日もその調子でいこ。`,
+      `Lv.${snapshot.level}まで来てるんだし、ちょっとやってみたら案外乗ってくるかもよ。`,
+      '始める前が一番腰重いんだよね、わかる。でもやり始めたら意外といけるパターン多いから。',
+      '無理にとは言わないけど、今日ちょっとだけでもやってみない？'
+    ];
+    return { text: pickLine(lines), suggestStudy:true };
+  }
+
+  if(mode==='romance'){
+    const tier = getAffectionTier(snapshot.affection);
+    romanceTurnCount++;
+    if(romanceTurnCount>=3){
+      romanceTurnCount = 0;
+      return { text: pickLine(ROMANCE_LINES[tier].nudgeBack), suggestStudy:true };
+    }
+    return { text: pickLine(ROMANCE_LINES[tier].generic), suggestStudy:false };
+  }
+
+  // casual
+  casualTurnCount++;
+  if(casualTurnCount>=3){
+    casualTurnCount = 0;
+    return { text: pickLine([
+      'こういう話、わたしも好きだけど……そろそろちょっとだけ勉強も進めとく？',
+      'いい感じに話せたし、ここで少し切り替えて勉強に戻ってみる？'
+    ]), suggestStudy:true };
+  }
+  return { text: pickLine([
+    'それ、ちょっとわかるかも。',
+    'へえ、そうなんだ。意外と気になる話だね。',
+    'それは……うん、わからなくもない（笑）'
+  ]), suggestStudy:false };
+}
+
+/* ---- chat rendering ---- */
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+function scrollChatToBottom(){
+  const win = document.getElementById('chatWindow');
+  win.scrollTop = win.scrollHeight;
+}
+function renderChat(){
+  const win = document.getElementById('chatWindow');
+  win.innerHTML = '';
+  chatMessages.forEach(m=>{
+    const row = document.createElement('div');
+    row.className = 'chat-row ' + (m.role==='user' ? 'user' : 'char');
+    row.innerHTML =
+      (m.role!=='user' ? `<div class="chat-name-label">${AI_CHARACTER.name}</div>` : '') +
+      `<div class="chat-bubble ${m.role==='user'?'user':'char'}">${escapeHtml(m.text)}</div>`;
+    win.appendChild(row);
+  });
+  scrollChatToBottom();
+}
+function showChatTyping(show){
+  let el = document.getElementById('chatTypingIndicator');
+  if(show){
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'chatTypingIndicator';
+      el.className = 'chat-typing';
+      el.textContent = AI_CHARACTER.name+'が入力中…';
+      document.getElementById('chatWindow').appendChild(el);
+    }
+  } else if(el){ el.remove(); }
+  scrollChatToBottom();
+}
+function showChatErrorBubble(msg){
+  clearChatErrorBubble();
+  const win = document.getElementById('chatWindow');
+  const row = document.createElement('div');
+  row.id = 'chatErrorBubble';
+  row.className = 'chat-row char';
+  row.innerHTML = `<div class="chat-bubble error">⚠️ ${escapeHtml(msg)}</div>`;
+  win.appendChild(row);
+  scrollChatToBottom();
+}
+function clearChatErrorBubble(){
+  const el = document.getElementById('chatErrorBubble');
+  if(el) el.remove();
+}
+
+/* ---- send flow ---- */
+let chatSending = false;
+function setChatSending(sending){
+  chatSending = sending;
+  const btn = document.getElementById('chatSendBtn');
+  const input = document.getElementById('chatInput');
+  btn.disabled = sending;
+  input.disabled = sending;
+  btn.textContent = sending ? '送信中…' : '送信';
+}
+async function sendChatMessage(){
+  if(chatSending) return; // 連打による多重送信を防止
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text) return;
+
+  clearChatErrorBubble();
+  chatMessages.push({ role:'user', text, ts:Date.now() });
+  input.value = '';
+  renderChat();
+  saveChatHistory(); // ユーザーの発言はこの時点で保存（失敗しても履歴から消えない）
+  showChatTyping(true);
+  setChatSending(true);
+
+  const snapshot = buildStudySnapshot();
+  const historyBeforeThisMessage = chatMessages.slice(0, -1);
+
+  try{
+    const reply = await requestCharacterReply(text, chatMode, snapshot, historyBeforeThisMessage);
+    showChatTyping(false);
+    chatMessages.push({ role:'char', text: reply.text, ts:Date.now() });
+    renderChat();
+    document.getElementById('chatSuggestRow').style.display = reply.suggestStudy ? 'block' : 'none';
+    saveChatHistory();
+  }catch(err){
+    // エラー時はキャラクターの返信を履歴に追加しない（履歴を壊さない）。
+    // ユーザーの発言はすでに保存済みなので、再送信すればそのまま続けられる。
+    showChatTyping(false);
+    showChatErrorBubble(err && err.message ? err.message : '通信エラーが発生しました。もう一度試してみて。');
+  }finally{
+    setChatSending(false);
+  }
+}
+document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
+document.getElementById('chatInput').addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !chatSending){ e.preventDefault(); sendChatMessage(); }
+});
+document.querySelectorAll('#chatModeToggle .mode-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#chatModeToggle .mode-btn').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    chatMode = btn.dataset.mode;
+    casualTurnCount = 0;
+    romanceTurnCount = 0;
+    document.getElementById('chatSuggestRow').style.display = 'none';
+  });
+});
+
+/* ---- study redirection button (does not touch the existing timer→reward→save loop) ---- */
+function goToTimerWithPreset(min){
+  if(!running){
+    workPresets.querySelectorAll('.preset-chip').forEach(b=> b.classList.toggle('active', parseInt(b.dataset.min)===min));
+    state.settings.workMin = min;
+    saveState();
+    setMode('work');
+  }
+  goScreen('timer');
+}
+document.getElementById('chatStudyBtn').addEventListener('click', ()=> goToTimerWithPreset(25));
+
+if(chatMessages.length===0){
+  chatMessages.push({
+    role:'char',
+    text:'お、こっちに来たんだ。勉強のことでも、それ以外の話でも、気軽に話しかけて。',
+    ts: Date.now()
+  });
+}
+
+/* ============ render: home ============ */
+function minutesLabel(sec){ return Math.floor(sec/60)+'分'; }
+
+function findNextGoal(){
+  const lockedEvents = EVENTS.filter(e=> !state.unlockedEvents.includes(e.id));
+  const lockedChapters = CHAPTERS.filter(c=> !state.unlockedChapters.includes(c.id));
+  const candidates = [];
+  lockedEvents.forEach(e=>{
+    if(e.id==='first25') candidates.push({title:e.title, cur:state.sessionsDone, target:1});
+    if(e.id==='hour1') candidates.push({title:e.title, cur:state.totalSeconds, target:3600});
+    if(e.id==='streak3') candidates.push({title:e.title, cur:state.streak, target:3});
+    if(e.id==='hour3') candidates.push({title:e.title, cur:state.totalSeconds, target:3600*3});
+    if(e.id==='hour5') candidates.push({title:e.title, cur:state.totalSeconds, target:3600*5});
+  });
+  lockedEvents.forEach(e=>{
+    if(e.id==='streak7') candidates.push({title:e.title, cur:state.streak, target:7});
+    if(e.id==='streak14') candidates.push({title:e.title, cur:state.streak, target:14});
+    if(e.id==='streak30') candidates.push({title:e.title, cur:state.streak, target:30});
+  });
+  lockedChapters.forEach(c=>{
+    if(c.id==='ch2') candidates.push({title:'Chapter '+c.no+'「'+c.title+'」', cur:Math.min(state.affection,20), target:20});
+    if(c.id==='ch3') candidates.push({title:'Chapter '+c.no+'「'+c.title+'」', cur:Math.min(state.affection,40), target:40});
+  });
+  if(candidates.length===0) return null;
+  candidates.forEach(c=> c.pct = Math.min(100, Math.round(c.cur/c.target*100)));
+  candidates.sort((a,b)=> b.pct - a.pct);
+  return candidates[0];
+}
+
+function renderHome(){
+  document.getElementById('homeToday').textContent = minutesLabel(state.todaySeconds);
+  document.getElementById('homeTotal').textContent = minutesLabel(state.totalSeconds);
+  document.getElementById('homeStreak').textContent = state.streak+'日';
+  document.getElementById('homeLevel').textContent = 'Lv.'+levelFromXp(state.xp);
+
+  const bondPct = Math.min(100, Math.round((state.affection/ (AFFECTION_MAX_FOR_BAR)) *100));
+  document.getElementById('bondFill2').style.width = bondPct+'%';
+  document.getElementById('bondPctText2').textContent = bondPct+'%';
+  document.getElementById('bondPctTitle').textContent = '好感度 '+state.affection;
+
+  const goalMin = state.settings.dailyGoalMin;
+  const todayMin = Math.floor(state.todaySeconds/60);
+  document.getElementById('goalCurrent').textContent = todayMin;
+  document.getElementById('goalTarget').textContent = goalMin;
+  document.getElementById('goalFill').style.width = Math.min(100, Math.round(todayMin/goalMin*100))+'%';
+
+  const goal = findNextGoal();
+  if(goal){
+    document.getElementById('nextEventTitle').textContent = goal.title;
+    document.getElementById('nextEventFill').style.width = goal.pct+'%';
+    document.getElementById('nextEventPct').textContent = goal.pct+'%';
+  } else {
+    document.getElementById('nextEventTitle').textContent = 'プロトタイプの全イベントを解放しました！';
+    document.getElementById('nextEventFill').style.width = '100%';
+    document.getElementById('nextEventPct').textContent = '100%';
+  }
+  document.getElementById('xpPill').textContent = state.xp;
+}
+
+/* ============ render: events ============ */
+function renderEvents(){
+  const list = document.getElementById('eventList');
+  list.innerHTML = '';
+  EVENTS.forEach(ev=>{
+    const unlocked = state.unlockedEvents.includes(ev.id);
+    const card = document.createElement('div');
+    card.className = 'event-card' + (unlocked ? '' : ' locked');
+    card.innerHTML = `
+      <div class="avatar">${unlocked ? '結' : '？'}</div>
+      <div style="flex:1;">
+        <div class="etitle">${unlocked ? ev.title : '？？？（未解放）'}</div>
+        <div class="etag">${unlocked ? ev.mood : 'この条件を満たすと解放されます'}</div>
+      </div>
+      ${unlocked && state.newFlags[ev.id] ? '<div class="new-badge">NEW</div>' : ''}
+    `;
+    if(unlocked) card.addEventListener('click', ()=> openDialogue(ev));
+    list.appendChild(card);
+  });
+}
+
+/* ============ render: chapters ============ */
+function renderChapters(){
+  const list = document.getElementById('chapterList');
+  list.innerHTML = '';
+  CHAPTERS.forEach(ch=>{
+    const unlocked = state.unlockedChapters.includes(ch.id);
+    const card = document.createElement('div');
+    card.className = 'chapter-card' + (unlocked ? '' : ' locked');
+    if(unlocked){
+      card.innerHTML = `
+        <div class="chapter-eyebrow">CHAPTER ${ch.no}</div>
+        <div class="chapter-title">${ch.title}</div>
+        <button class="chapter-open">読む</button>
+      `;
+      card.querySelector('.chapter-open').addEventListener('click', ()=> openChapter(ch));
+    } else {
+      card.innerHTML = `
+        <div class="chapter-eyebrow">CHAPTER ${ch.no}</div>
+        <div class="chapter-title">？？？</div>
+        <div class="chapter-cond">${ch.condText}</div>
+      `;
+    }
+    list.appendChild(card);
+  });
+}
+function openChapter(ch){
+  startVN(ch.text, {
+    mood: 'CHAPTER '+ch.no, name: ch.title, avatarChar:'📖',
+    completionLabel: 'Chapter '+ch.no+' 読了:「'+ch.title+'」'
+  });
+}
+
+/* ============ render: records ============ */
+function buildDailyTotals(){
+  const map = {};
+  state.sessionLog.forEach(e=>{
+    if(e.type !== 'work') return;
+    map[e.date] = (map[e.date]||0) + e.minutes;
+  });
+  return map;
+}
+function last7Days(){
+  const arr = [];
+  for(let i=6;i>=0;i--){
+    const d = new Date();
+    d.setDate(d.getDate()-i);
+    const key = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    arr.push({ key, date:d, isToday: i===0 });
+  }
+  return arr;
+}
+function renderRecords(){
+  const totals = buildDailyTotals();
+  const days = last7Days();
+  const weekMinutes = days.reduce((sum,d)=> sum + (totals[d.key]||0), 0);
+
+  document.getElementById('recToday').textContent = minutesLabel(state.todaySeconds);
+  document.getElementById('recWeek').textContent = weekMinutes+'分';
+  document.getElementById('recTotal').textContent = minutesLabel(state.totalSeconds);
+  document.getElementById('recStreak').textContent = state.streak+'日';
+
+  const maxVal = Math.max(1, ...days.map(d=> totals[d.key]||0));
+  const weekdayLabels = ['日','月','火','水','木','金','土'];
+  const chart = document.getElementById('chartWrap');
+  chart.innerHTML = '';
+  days.forEach(d=>{
+    const val = totals[d.key] || 0;
+    const pct = Math.max(2, Math.round(val/maxVal*100));
+    const col = document.createElement('div');
+    col.className = 'chart-col' + (d.isToday ? ' today' : '');
+    col.innerHTML = `
+      <div class="chart-val">${val>0?val:''}</div>
+      <div class="chart-bar" style="height:${pct}%"></div>
+      <div class="chart-day">${weekdayLabels[d.date.getDay()]}</div>
+    `;
+    chart.appendChild(col);
+  });
+
+  const list = document.getElementById('recordList');
+  list.innerHTML = '';
+  if(state.sessionLog.length===0){
+    list.innerHTML = '<div class="empty-note">まだ記録がありません。タイマーを完了させると、ここに記録されます。</div>';
+    return;
+  }
+  state.sessionLog.forEach(entry=>{
+    const row = document.createElement('div');
+    row.className = 'log-row';
+    row.innerHTML = `<span>📚 勉強 ${entry.minutes}分</span><span class="d">${entry.date}</span>`;
+    list.appendChild(row);
+  });
+}
+
+/* ============ render: status ============ */
+function rankLabel(lv){
+  if(lv>=15) return '伝説の勉強家';
+  if(lv>=10) return '受験の覚悟者';
+  if(lv>=6) return '努力を続ける人';
+  if(lv>=3) return '習慣づいてきた人';
+  return '駆け出し勉強家';
+}
+function renderStatus(){
+  document.getElementById('accountEmailLabel').textContent = currentUser ? currentUser.email : '-';
+  const lv = levelFromXp(state.xp);
+  document.getElementById('statusLevel').textContent = 'Lv.'+lv;
+  document.getElementById('statusRank').textContent = rankLabel(lv) + '（次のレベルまで '+(100-xpIntoLevel(state.xp))+'EXP）';
+  document.getElementById('statTotal').textContent = minutesLabel(state.totalSeconds);
+  document.getElementById('statBestStreak').textContent = state.bestStreak+'日';
+  document.getElementById('statSessions').textContent = state.sessionsDone+'回';
+  document.getElementById('statAffection').textContent = state.affection;
+
+  const grid = document.getElementById('badgeGrid');
+  grid.innerHTML = '';
+  const badgeDefs = [
+    {id:'first25', icon:'🌱', label:'はじめの一歩'},
+    {id:'hour1', icon:'⏰', label:'1時間の壁'},
+    {id:'streak3', icon:'🔥', label:'3日連続'},
+    {id:'hour3', icon:'📘', label:'3時間突破'},
+    {id:'hour5', icon:'🏅', label:'5時間達成'},
+    {id:'streak7', icon:'🌟', label:'7日連続'},
+    {id:'streak14', icon:'💫', label:'14日連続'},
+    {id:'streak30', icon:'👑', label:'30日連続'},
+    {id:'ch2', icon:'💌', label:'距離が縮まる'},
+    {id:'ch3', icon:'📗', label:'続ける理由'}
+  ];
+  badgeDefs.forEach(b=>{
+    const got = state.unlockedEvents.includes(b.id) || state.unlockedChapters.includes(b.id);
+    const el = document.createElement('div');
+    el.className = 'badge' + (got ? ' got' : '');
+    el.innerHTML = `<span class="bi">${b.icon}</span>${b.label}`;
+    grid.appendChild(el);
+  });
+}
+
+function refreshAllStatsDisplays(){
+  renderHome();
+  renderEvents();
+  renderChapters();
+  renderStatus();
+}
+
+/* ============ init ============ */
+function startApp(){
+  // ログイン中のユーザーに紐づくデータへ差し替える
+  state = loadState();
+  if(state.todayDate !== todayStr()){ state.todayDate = todayStr(); state.todaySeconds = 0; saveState(); }
+  chatMessages = loadChatHistory();
+  if(chatMessages.length===0){
+    chatMessages.push({
+      role:'char',
+      text:'お、こっちに来たんだ。勉強のことでも、それ以外の話でも、気軽に話しかけて。',
+      ts: Date.now()
+    });
+  }
+  casualTurnCount = 0;
+  romanceTurnCount = 0;
+
+  customMinInput.placeholder = state.settings.workMin+'分';
+  setMode('work');
+  refreshAllStatsDisplays();
+  renderRecords();
+  renderChat();
+  goScreen('home');
+}
+
+document.getElementById('authLoginBtn').addEventListener('click', handleLoginSubmit);
+document.getElementById('authSignupBtn').addEventListener('click', handleSignupSubmit);
+document.getElementById('authGoogleBtn').addEventListener('click', handleGoogleLogin);
+document.getElementById('authPassword').addEventListener('keydown', e=>{
+  if(e.key==='Enter'){ e.preventDefault(); handleLoginSubmit(); }
+});
+document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+
+/* ---- auth state observer: ログイン状態の監視 ----
+   未ログイン → authScreenのみ表示 / ログイン済み → appShellを表示 */
+onAuthStateChanged(auth, (user)=>{
+  if(user){
+    currentUser = { uid: user.uid, email: user.email || '' };
+    showApp();
+  } else {
+    currentUser = null;
+    chatMessages = [];
+    state = defaultState();
+    showAuthScreen();
+  }
+});
+</script>
+</body>
+</html>
