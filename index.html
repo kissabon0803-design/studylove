@@ -652,7 +652,7 @@ const googleProvider = new GoogleAuthProvider();
    デプロイ後、実際のURLに書き換えること。
    例: https://study-love-chat.vercel.app/api/chat
    APIキーはこのURL越しのサーバー側にのみ存在し、クライアントには一切含まれない。 */
-const CHAT_API_URL = 'https://studylove-three.vercel.app/api/chat';
+const CHAT_API_URL = 'https://studylove-utuj-rust.vercel.app/api/chat';
 
 let currentUser = null; // { uid, email } | null （ログインしていない間は null）
 
@@ -661,6 +661,8 @@ function getSaveKey(){
   return 'studysync_yui_save_v1_' + (currentUser ? currentUser.uid : 'guest');
 }
 function getChatHistoryKey(){
+  // 種類（モード）ごとの履歴をまとめて1つのキーに保存する
+  // 形式: { consult:[...], cheer:[...], romance:[...], casual:[...] }
   return 'studysync_yui_chat_v1_' + (currentUser ? currentUser.uid : 'guest');
 }
 
@@ -1274,26 +1276,62 @@ const AI_CHARACTER = {
 };
 
 /* ---- chat state ---- */
-let chatMode = 'consult'; // 'consult' | 'cheer' | 'romance' | 'casual'
+const CHAT_MODES = ['consult','cheer','romance','casual']; // 'consult' | 'cheer' | 'romance' | 'casual'
+let chatMode = 'consult';
 let casualTurnCount = 0;
 let romanceTurnCount = 0;
-const CHAT_HISTORY_MAX = 30; // 直近30件（保存データが肥大化しないよう上限を設ける）
+const CHAT_HISTORY_MAX = 30; // モードごとに直近30件（保存データが肥大化しないよう上限を設ける）
 
-function loadChatHistory(){
+const CHAT_DEFAULT_GREETINGS = {
+  consult: 'お、こっちに来たんだ。勉強のことで気になることあれば、遠慮なく相談して。',
+  cheer:   'やる気出したい時はここに来て。ちょっとテンション上げてくよ。',
+  romance: '……ここでは、ちょっと違う話もできるかもね。何か話す？',
+  casual:  '勉強以外の話でも、気軽にどうぞ。'
+};
+
+/* 種類（モード）ごとにチャット履歴を保持する。切り替えるたびに履歴も入れ替わる。 */
+let chatHistoriesByMode = { consult:[], cheer:[], romance:[], casual:[] };
+// chatMessages は現在選択中モードの履歴配列を指すエイリアス（レンダリングや送信処理から参照する）
+let chatMessages = chatHistoriesByMode[chatMode];
+
+function loadChatHistories(){
   try{
     const raw = storage.get(getChatHistoryKey());
-    if(!raw) return [];
+    if(!raw) return null;
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  }catch(e){ return []; }
+    const out = { consult:[], cheer:[], romance:[], casual:[] };
+    if(parsed && typeof parsed==='object' && !Array.isArray(parsed)){
+      // 新形式：モードごとの履歴
+      CHAT_MODES.forEach(m=>{ if(Array.isArray(parsed[m])) out[m] = parsed[m]; });
+      return out;
+    }
+    if(Array.isArray(parsed)){
+      // 旧形式（種類分けされていない単一履歴）からの移行：勉強相談の履歴として引き継ぐ
+      out.consult = parsed;
+      return out;
+    }
+    return out;
+  }catch(e){ return null; }
 }
-function saveChatHistory(){
-  if(chatMessages.length > CHAT_HISTORY_MAX){
-    chatMessages = chatMessages.slice(chatMessages.length - CHAT_HISTORY_MAX);
-  }
-  try{ storage.set(getChatHistoryKey(), JSON.stringify(chatMessages)); }catch(e){}
+function saveChatHistories(){
+  CHAT_MODES.forEach(m=>{
+    const arr = chatHistoriesByMode[m];
+    if(arr.length > CHAT_HISTORY_MAX){
+      chatHistoriesByMode[m] = arr.slice(arr.length - CHAT_HISTORY_MAX);
+    }
+  });
+  try{ storage.set(getChatHistoryKey(), JSON.stringify(chatHistoriesByMode)); }catch(e){}
+  chatMessages = chatHistoriesByMode[chatMode]; // スライスで配列が差し替わった場合に備えてエイリアスを再同期
 }
-let chatMessages = []; // ログイン後に startApp() 内で該当ユーザーの履歴へ差し替える
+/* 表示中モードを切り替える：履歴・カウンター・表示を該当モードのものへ入れ替える */
+function switchChatMode(mode){
+  chatMode = mode;
+  chatMessages = chatHistoriesByMode[chatMode];
+  casualTurnCount = 0;
+  romanceTurnCount = 0;
+  document.getElementById('chatSuggestRow').style.display = 'none';
+  renderChat();
+}
 
 /* ---- study data snapshot: passed to the character so replies reflect real progress ---- */
 function getCurrentChapterInfo(){
@@ -1386,7 +1424,17 @@ async function requestCharacterReply(userMessage, mode, studySnapshot, historyBe
   }
 
   if(!res.ok){
-    throw new ChatReplyError(translateChatHttpError(res.status));
+    // サーバーが具体的なmessageを返している場合はそれを優先表示する
+    // （原因不明の「サーバーでエラーが発生しました」だけで終わらせないため）。
+    let serverMessage = null;
+    try{
+      const errBody = await res.json();
+      if(errBody && typeof errBody.message === 'string') serverMessage = errBody.message;
+      console.error('chat API error:', res.status, errBody);
+    }catch(e){
+      console.error('chat API error:', res.status, '(no JSON body)');
+    }
+    throw new ChatReplyError(serverMessage || translateChatHttpError(res.status));
   }
 
   let data;
@@ -1602,7 +1650,7 @@ async function sendChatMessage(){
   chatMessages.push({ role:'user', text, ts:Date.now() });
   input.value = '';
   renderChat();
-  saveChatHistory(); // ユーザーの発言はこの時点で保存（失敗しても履歴から消えない）
+  saveChatHistories(); // ユーザーの発言はこの時点で保存（失敗しても履歴から消えない）
   showChatTyping(true);
   setChatSending(true);
 
@@ -1615,7 +1663,7 @@ async function sendChatMessage(){
     chatMessages.push({ role:'char', text: reply.text, ts:Date.now() });
     renderChat();
     document.getElementById('chatSuggestRow').style.display = reply.suggestStudy ? 'block' : 'none';
-    saveChatHistory();
+    saveChatHistories();
   }catch(err){
     // エラー時はキャラクターの返信を履歴に追加しない（履歴を壊さない）。
     // ユーザーの発言はすでに保存済みなので、再送信すればそのまま続けられる。
@@ -1631,12 +1679,10 @@ document.getElementById('chatInput').addEventListener('keydown', e=>{
 });
 document.querySelectorAll('#chatModeToggle .mode-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
+    if(btn.dataset.mode === chatMode) return;
     document.querySelectorAll('#chatModeToggle .mode-btn').forEach(b=> b.classList.remove('active'));
     btn.classList.add('active');
-    chatMode = btn.dataset.mode;
-    casualTurnCount = 0;
-    romanceTurnCount = 0;
-    document.getElementById('chatSuggestRow').style.display = 'none';
+    switchChatMode(btn.dataset.mode); // 履歴・カウンター・表示をまとめてこのモードのものへ入れ替える
   });
 });
 
@@ -1651,14 +1697,6 @@ function goToTimerWithPreset(min){
   goScreen('timer');
 }
 document.getElementById('chatStudyBtn').addEventListener('click', ()=> goToTimerWithPreset(25));
-
-if(chatMessages.length===0){
-  chatMessages.push({
-    role:'char',
-    text:'お、こっちに来たんだ。勉強のことでも、それ以外の話でも、気軽に話しかけて。',
-    ts: Date.now()
-  });
-}
 
 /* ============ render: home ============ */
 function minutesLabel(sec){ return Math.floor(sec/60)+'分'; }
@@ -1885,14 +1923,16 @@ function startApp(){
   // ログイン中のユーザーに紐づくデータへ差し替える
   state = loadState();
   if(state.todayDate !== todayStr()){ state.todayDate = todayStr(); state.todaySeconds = 0; saveState(); }
-  chatMessages = loadChatHistory();
-  if(chatMessages.length===0){
-    chatMessages.push({
-      role:'char',
-      text:'お、こっちに来たんだ。勉強のことでも、それ以外の話でも、気軽に話しかけて。',
-      ts: Date.now()
-    });
-  }
+  chatHistoriesByMode = loadChatHistories() || { consult:[], cheer:[], romance:[], casual:[] };
+  CHAT_MODES.forEach(m=>{
+    if(chatHistoriesByMode[m].length===0){
+      chatHistoriesByMode[m].push({ role:'char', text: CHAT_DEFAULT_GREETINGS[m], ts: Date.now() });
+    }
+  });
+  chatMode = 'consult';
+  document.querySelectorAll('#chatModeToggle .mode-btn').forEach(b=>
+    b.classList.toggle('active', b.dataset.mode===chatMode));
+  chatMessages = chatHistoriesByMode[chatMode];
   casualTurnCount = 0;
   romanceTurnCount = 0;
 
@@ -1920,7 +1960,8 @@ onAuthStateChanged(auth, (user)=>{
     showApp();
   } else {
     currentUser = null;
-    chatMessages = [];
+    chatHistoriesByMode = { consult:[], cheer:[], romance:[], casual:[] };
+    chatMessages = chatHistoriesByMode[chatMode];
     state = defaultState();
     showAuthScreen();
   }
