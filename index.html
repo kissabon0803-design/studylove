@@ -1420,7 +1420,7 @@ async function requestCharacterReply(userMessage, mode, studySnapshot, historyBe
       })
     });
   }catch(e){
-    throw new ChatReplyError('通信エラーが発生しました。ネットワーク環境を確認してもう一度試してみて。');
+    throw new ChatReplyError('[DEBUG] ' + (e && e.name ? e.name : 'Error') + ': ' + (e && e.message ? e.message : String(e)));
   }
 
   if(!res.ok){
