@@ -553,7 +553,7 @@ body{
     <button class="nav-btn active" data-screen="home"><span class="ni">🏠</span>ホーム</button>
     <button class="nav-btn" data-screen="timer"><span class="ni">⏱️</span>タイマー</button>
     <button class="nav-btn" data-screen="convo"><span class="ni">💬</span>会話</button>
-    <button class="nav-btn" data-screen="chat"><span class="ni">🤖</span>チャット</button>
+    <button class="nav-btn" data-screen="chat" style="display:none;"><span class="ni">🤖</span>チャット</button>
     <button class="nav-btn" data-screen="story"><span class="ni">📖</span>ストーリー</button>
     <button class="nav-btn" data-screen="records"><span class="ni">📊</span>記録</button>
     <button class="nav-btn" data-screen="status"><span class="ni">⭐</span>ステータス</button>
@@ -1420,7 +1420,7 @@ async function requestCharacterReply(userMessage, mode, studySnapshot, historyBe
       })
     });
   }catch(e){
-    throw new ChatReplyError('[DEBUG] ' + (e && e.name ? e.name : 'Error') + ': ' + (e && e.message ? e.message : String(e)));
+    throw new ChatReplyError('通信エラーが発生しました。ネットワーク環境を確認してもう一度試してみて。');
   }
 
   if(!res.ok){
